@@ -25,20 +25,28 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-//    btn.titleLabel.numberOfLines = 0;
-//    [btn setTitle:@"nnnnnmmmmmmmmmuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuoo" forState:UIControlStateNormal];
-//    [self.view addSubview:btn];
-//    btn.backgroundColor = [UIColor redColor];
-//    [btn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self.view).offset(20);
-//        make.left.equalTo(self.view).offset(20);
-//        make.right.equalTo(self.view).offset(-20);
-//        //make.baseline.equalTo(self.view.mas_centerY);
-//    }];
-    
-    CGFloat w = [UIScreen mainScreen].bounds.size.width;
-    
+    //[self testBtn];
+    [self test];
+    //[self scrollViewLayOut];
+    //[self systemSet];
+}
+
+- (void)testBtn {
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    btn.titleLabel.numberOfLines = 0;
+    [btn setTitle:@"nnnnnmmmmmmmmmuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuoo" forState:UIControlStateNormal];
+    [self.view addSubview:btn];
+    btn.backgroundColor = [UIColor redColor];
+    [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view).offset(20);
+        make.left.equalTo(self.view).offset(20);
+        make.right.equalTo(self.view).offset(-20);
+        //make.baseline.equalTo(self.view.mas_centerY);
+    }];
+
+}
+
+- (void)test {
     UIView *greenView = [[UIView alloc] init];
     greenView.backgroundColor = [UIColor greenColor];
     [self.view addSubview:greenView];
@@ -81,7 +89,7 @@
         make.bottom.equalTo(redView);
         make.height.equalTo(greenView).multipliedBy(0.5);
     }];
-
+    
     [yellowView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(blueView);
         make.left.equalTo(blueView.mas_right).offset(padding);
@@ -89,7 +97,7 @@
         make.width.equalTo(blueView).multipliedBy(1.25);
         make.right.equalTo(redView.mas_left).offset(-padding);
     }];
-
+    
     [blackView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(blueView.mas_bottom).offset(padding);
         make.left.equalTo(greenView);
@@ -97,88 +105,98 @@
         make.bottom.equalTo(self.view).offset(-padding);
         //make.height.equalTo(@100);
     }];
+
+}
+
+//scrollview不用设置contentSize
+- (void)scrollViewLayOut {
+        _scrollView = [UIScrollView new];
+        _scrollView.backgroundColor = [UIColor whiteColor];
+        [self.view addSubview:_scrollView];
+        [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.view).with.insets(UIEdgeInsetsMake(5,5,5,5));
+        }];
+        UIView *container = [UIView new];
+        [_scrollView addSubview:container];
+        [container mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(_scrollView);
+            make.width.equalTo(_scrollView);
+        }];
+        int count = 10;
+        UIView *lastView = nil;
+        for ( int i = 1 ; i <= count ; ++i )
+        {
+            UIView *subv = [UIView new];
+            [container addSubview:subv];
+            subv.backgroundColor = [UIColor colorWithHue:( arc4random() % 256 / 256.0 )
+                                              saturation:( arc4random() % 128 / 256.0 ) + 0.5
+                                              brightness:( arc4random() % 128 / 256.0 ) + 0.5
+                                                   alpha:1];
     
-//    _scrollView = [UIScrollView new];
-//    _scrollView.backgroundColor = [UIColor whiteColor];
-//    [self.view addSubview:_scrollView];
-//    [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.edges.equalTo(self.view).with.insets(UIEdgeInsetsMake(5,5,5,5));
-//    }];
-//    UIView *container = [UIView new];
-//    [_scrollView addSubview:container];
-//    [container mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.edges.equalTo(_scrollView);
-//        make.width.equalTo(_scrollView);
-//    }];
-//    int count = 10;
-//    UIView *lastView = nil;
-//    for ( int i = 1 ; i <= count ; ++i )
-//    {
-//        UIView *subv = [UIView new];
-//        [container addSubview:subv];
-//        subv.backgroundColor = [UIColor colorWithHue:( arc4random() % 256 / 256.0 )
-//                                          saturation:( arc4random() % 128 / 256.0 ) + 0.5
-//                                          brightness:( arc4random() % 128 / 256.0 ) + 0.5
-//                                               alpha:1];
-//        
-//        [subv mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.left.and.right.equalTo(container);
-//            make.height.mas_equalTo(@(20*i));
-//            
-//            if ( lastView )
-//            {
-//                make.top.mas_equalTo(lastView.mas_bottom);
-//            }
-//            else
-//            {
-//                make.top.mas_equalTo(container.mas_top);
-//            }
-//        }];
-//        
-//        lastView = subv;
-//    }
-//    [container mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.width.equalTo(_scrollView);
-//        make.bottom.equalTo(lastView.mas_bottom);
-//    }];
+            [subv mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.and.right.equalTo(container);
+                make.height.mas_equalTo(@(20*i));
+    
+                if ( lastView )
+                {
+                    make.top.mas_equalTo(lastView.mas_bottom);
+                }
+                else
+                {
+                    make.top.mas_equalTo(container.mas_top);
+                }
+            }];
+    
+            lastView = subv;
+        }
+        [container mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(_scrollView);
+            make.bottom.equalTo(lastView.mas_bottom);
+        }];
+
+}
+
+//苹果提供的写法
+- (void)systemSet {
+        UIView *v = [[UIView alloc] init];
+        v.backgroundColor = [UIColor redColor];
+        v.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.view addSubview:v];
+    
+        UIView *v2 = [[UIView alloc] init];
+        v2.backgroundColor = [UIColor blueColor];
+        [self.view addSubview:v2];
+        v2.translatesAutoresizingMaskIntoConstraints = NO;
+    
+        NSDictionary *views = @{@"v": v,@"v2":v2};
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:v
+                                                             attribute:NSLayoutAttributeWidth
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:self.view
+                                                             attribute:NSLayoutAttributeWidth
+                                                            multiplier:1.0
+                                                               constant:0]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:v
+                                                              attribute:NSLayoutAttributeHeight
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:self.view
+                                                              attribute:NSLayoutAttributeHeight
+                                                             multiplier:.5
+                                                               constant:0]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[v][v2(==v)]-0-|" options:0 metrics:nil views:views]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[v][v2(==v)]-0-[v2]-0-|" options:0 metrics:nil views:views]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[v]-0-[v2]-0-|" options:0 metrics:nil views:views]];
     
     
-//    UIView *v = [[UIView alloc] init];
-//    v.backgroundColor = [UIColor redColor];
-//    v.translatesAutoresizingMaskIntoConstraints = NO;
-//    [self.view addSubview:v];
-//    
-//    UIView *v2 = [[UIView alloc] init];
-//    v2.backgroundColor = [UIColor blueColor];
-//    [self.view addSubview:v2];
-//    v2.translatesAutoresizingMaskIntoConstraints = NO;
-    
-//    NSDictionary *views = @{@"v": v,@"v2":v2};
-//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:v
-//                                                         attribute:NSLayoutAttributeWidth
-//                                                         relatedBy:NSLayoutRelationEqual
-//                                                            toItem:self.view
-//                                                         attribute:NSLayoutAttributeWidth
-//                                                        multiplier:1.0
-//                                                           constant:0]];
-//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:v
-//                                                          attribute:NSLayoutAttributeHeight
-//                                                          relatedBy:NSLayoutRelationEqual
-//                                                             toItem:self.view
-//                                                          attribute:NSLayoutAttributeHeight
-//                                                         multiplier:.5
-//                                                           constant:0]];
-//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[v][v2(==v)]-0-|" options:0 metrics:nil views:views]];
-//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[v][v2(==v)]-0-[v2]-0-|" options:0 metrics:nil views:views]];
-//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[v]-0-[v2]-0-|" options:0 metrics:nil views:views]];
-//    [v mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.left.right.equalTo(self.view);
-//        make.height.equalTo(self.view).multipliedBy(0.5);
-//    }];
-//    [v2 mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.right.height.equalTo(v);
-//        make.top.equalTo(v.mas_bottom);
-//    }];
+    //    [v mas_makeConstraints:^(MASConstraintMaker *make) {
+    //        make.top.left.right.equalTo(self.view);
+    //        make.height.equalTo(self.view).multipliedBy(0.5);
+    //    }];
+    //    [v2 mas_makeConstraints:^(MASConstraintMaker *make) {
+    //        make.left.right.height.equalTo(v);
+    //        make.top.equalTo(v.mas_bottom);
+    //    }];
+
 }
 
 - (void)didReceiveMemoryWarning {
